@@ -5,12 +5,15 @@
 x_com = None
 y_com = None
 theta_knee = None
+xdot_com = None
+ydot_com = None
+thetadot_knee = None
 F_seat = None
-state_vector = [x_com, y_com, theta_knee, F_seat]
+state_vector = [x_com, y_com, theta_knee]
 
 # Set Up State Machine
 
-# class Phase:
+# class StateMachine:
 #     def __init__(self):
 #         self.states = {
 #             "null": self.null_state,
@@ -21,7 +24,7 @@ state_vector = [x_com, y_com, theta_knee, F_seat]
 #         }
 #         self.current_state = "null"
     
-#     def determine_state(self, state_vector):
+#     def determine_state(self, state_vector, F_seat):
 #         if self.current_state == "null":
 #             # determine whether sitting or standing based on state vector
 #         else:
@@ -29,4 +32,4 @@ state_vector = [x_com, y_com, theta_knee, F_seat]
 
 # Functions
 
-# def main(state_vector)
+def main(state_vector):
