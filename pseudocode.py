@@ -1,5 +1,7 @@
 # Pseudocode
 
+import time
+
 # State Variables
 
 x_com = None
@@ -13,7 +15,7 @@ state_vector = [x_com, y_com, theta_knee, xdot_com, ydot_com, thetadot_knee]
 
 # Set Up State Machine
 
-# class StateMachine:
+# class PhaseStateMachine:
 #     def __init__(self):
 #         self.phases = {
 #             "null": self.null_state,
@@ -24,7 +26,7 @@ state_vector = [x_com, y_com, theta_knee, xdot_com, ydot_com, thetadot_knee]
 #         }
 #         self.current_phase = "null"
     
-#     def determine_state(self, state_vector, F_seat):
+#     def determine_phase(self, state_vector, F_seat):
 #         if self.current_phase == "null":
 #             # determine whether sitting or standing based on state vector
 #         else:
@@ -42,5 +44,14 @@ state_vector = [x_com, y_com, theta_knee, xdot_com, ydot_com, thetadot_knee]
 
 # def calculate_motor_torque:
 
-# def drive_motor(tau_desired):
+# def generate_PD(tau_desired, tau_prev, time_prev):
+#   time_current = time.monotonic_ns()
 #   tau_current = calculate_motor_torque
+#   error = tau_desired - tau_current
+#   delta_us = (time_current - time_prev)/1000000000
+#   d_error = (tau_current - tau_prev)/delta_us
+#   PD_signal = kp*error + kd*d_error
+#   return PD_signal
+
+# def drive_motor(PD_signal)
+#   Some code to drive the motor
