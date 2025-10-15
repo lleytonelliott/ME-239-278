@@ -62,7 +62,7 @@ def setup(kp, kd, Kt):
     return state_machine, torque_controller, state_vector
 
 def main(kp, kd, Kt):
-    
+
     state_machine, torque_controller, state_vector = setup(kp, kd, Kt)
 
     # run the loop
@@ -79,23 +79,6 @@ def main(kp, kd, Kt):
 # def read_motor_current:
 
 # def calculate_motor_torque:
-
-# def generate_PD(tau_desired):
-#   global error_prev, time_prev
-
-#   motor_current = read_motor_current()
-#   tau_actual = motor_current*torque_constant
-#   error = tau_desired - tau_actual
-
-#   time_current = time.monotonic_ns()
-#   delta_t = (time_current - time_prev)/1000000000
-#   time_prev = time_current
-
-#   d_error = (error - error_prev)/delta_t
-#   error_prev = error
-
-#   PD_signal = kp*error + kd*d_error
-#   return PD_signal
 
 # def drive_motor(PD_signal)
 #   Some code to drive the motor
