@@ -2,16 +2,11 @@
 
 import time
 
-# State Variables
+# Loop Variables
 
-x_com = None
-y_com = None
-theta_knee = None
-xdot_com = None
-ydot_com = None
-thetadot_knee = None
-F_seat = None
-state_vector = [x_com, y_com, theta_knee, xdot_com, ydot_com, thetadot_knee]
+kp = 0
+kd = 0
+Kt = 0
 
 # Set Up State Machine
 
@@ -32,9 +27,48 @@ state_vector = [x_com, y_com, theta_knee, xdot_com, ydot_com, thetadot_knee]
 #         else:
 #             return self.current_phase
 
+# Low-Level Torque Controller
+
+class TorqueController:
+    def __init__(self, kp, kd, Kt):
+        self.kp = kp
+        self.kd = kd
+        self.Kt = Kt
+        self.error_prev = 0
+        self.time_prev = time.monotonic_ns()
+    
+    def generate_PD(self, tau_desired):
+        motor_current = read_motor_current()
+        tau_actual = motor_current*self.Kt
+        error = tau_desired - tau_actual
+
+        time_current = time.monotonic_ns()
+        delta_t = (time_current - self.time_prev)/1000000000
+        self.time_prev = time_current
+
+        d_error = (error - self.error_prev)/delta_t
+        self.error_prev = error
+        
+        return self.kp*error + self.kd*d_error
+
 # Functions
 
-# def main(state_vector, phase):
+def setup(kp, kd, Kt):
+
+    state_machine = PhaseStateMachine()
+    torque_controller = TorqueController(kp, kd, Kt)
+    state_vector = [0, 0, 0, 0, 0, 0]
+
+    return state_machine, torque_controller, state_vector
+
+def main(kp, kd, Kt):
+    
+    state_machine, torque_controller, state_vector = setup(kp, kd, Kt)
+
+    # run the loop
+    # while True:
+
+# def calculate_desired_torque(state_vector, phase):
 #   Calculate ideal torque based on state vector and current phase of motion
 
 # def update_sensors(x_com_prev, y_com_prev, theta_knee_prev):
@@ -42,16 +76,29 @@ state_vector = [x_com, y_com, theta_knee, xdot_com, ydot_com, thetadot_knee]
 #   Find encoder position and calculate knee angle
 #   Find force vector from seat
 
+# def read_motor_current:
+
 # def calculate_motor_torque:
 
-# def generate_PD(tau_desired, tau_prev, time_prev):
+# def generate_PD(tau_desired):
+#   global error_prev, time_prev
+
+#   motor_current = read_motor_current()
+#   tau_actual = motor_current*torque_constant
+#   error = tau_desired - tau_actual
+
 #   time_current = time.monotonic_ns()
-#   tau_current = calculate_motor_torque
-#   error = tau_desired - tau_current
-#   delta_us = (time_current - time_prev)/1000000000
-#   d_error = (tau_current - tau_prev)/delta_us
+#   delta_t = (time_current - time_prev)/1000000000
+#   time_prev = time_current
+
+#   d_error = (error - error_prev)/delta_t
+#   error_prev = error
+
 #   PD_signal = kp*error + kd*d_error
 #   return PD_signal
 
 # def drive_motor(PD_signal)
 #   Some code to drive the motor
+
+if __name__ == "__main__":
+    main()
