@@ -23,12 +23,13 @@ class PhaseStateMachine:
             "stand to sit": self.stand2sit,
         }
 
-        self.valid_events = {"startup",
-                       "stand_threshold_crossed",
-                       "finished_standing",
-                       "sit_threshold_crossed",
-                       "finished_sitting",
-                       "emergency"
+        self.valid_events = {
+            "startup",
+            "stand_threshold_crossed",
+            "finished_standing",
+            "sit_threshold_crossed",
+            "finished_sitting",
+            "emergency"
         }
         
     def transition(self, event, state_vector = None, F_seat = None):
@@ -84,7 +85,6 @@ class PhaseStateMachine:
         elif event == "emergency":
             return "null"
         return "null"
-
 
 # Low-Level Torque Controller
 
