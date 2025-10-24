@@ -32,13 +32,13 @@ class PhaseStateMachine:
             "emergency"
         }
         
-    def transition(self, event, state_vector = None, F_seat = None):
+    def transition(self, event, state_vector = None):
         if event not in self.valid_events:
             print(f"Ignored Invalid Event '{event}'.")
             return
         
         handler = self.phase_handlers[self.current_phase]
-        new_phase = handler(event, state_vector = state_vector, F_seat = F_seat)
+        new_phase = handler(event, state_vector = state_vector)
 
         if self.current_phase != new_phase:
             print(f"Transition: '{self.current_phase}' -> '{new_phase}' on event '{event}'.")
@@ -76,9 +76,9 @@ class PhaseStateMachine:
             return "null"
         return "stand to sit"
     
-    def null_state(self, event, state_vector, F_seat):
+    def null_state(self, event, state_vector):
         if event == "startup":
-            if #state_vector and F_seat are above certain threshold for sitting:
+            if #state_vector hits certain threshold for sitting:
                 return "sitting"
             else:
                 return "standing"
@@ -119,8 +119,8 @@ def setup(kp, kd, Kt):
 
     state_vector = np.array([0, 0, 0, None, None, None])
 
-    state_vector, F_seat = update_sensors(state_vector, None)
-    state_machine.transition("startup", state_vector = state_vector, F_seat = F_seat)
+    state_vector = update_sensors(state_vector, None)
+    state_machine.transition("startup", state_vector = state_vector)
 
     return state_machine, torque_controller, state_vector
 
@@ -136,24 +136,22 @@ def main(kp, kd, Kt):
 #   Calculate ideal torque based on state vector and current phase of motion
 
 def update_sensors(state_vector, delta_t_sensors):
-    x_com_prev = state_vector[0]
-    y_com_prev = state_vector[1]
-    theta_knee_prev = state_vector[2]
+    z_ori_prev = state_vector[0]
+    theta_knee_prev = state_vector[1]
+    F_seat_prev = state_vector[2]
     
-    state_vector[0] = # Set x position based on sensors
-    state_vector[1] = # Set y position based on sensors
-    state_vector[2] = # Set theta position based on sensors
+    state_vector[0] = # Set orientation about z based on sensors
+    state_vector[1] = # Set theta position based on sensors
+    state_vector[2] = # Set seat force based on sensors
 
-    if x_com_prev == y_com_prev == theta_knee_prev == delta_t_sensors == None:
+    if z_ori_prev == theta_knee_prev == F_seat_prev == delta_t_sensors == None:
         state_vector[3:6] = 0
     else:
-        state_vector[3] = (state_vector[0] - x_com_prev)/delta_t_sensors
-        state_vector[4] = (state_vector[1] - y_com_prev)/delta_t_sensors
-        state_vector[5] = (state_vector[2] - theta_knee_prev)/delta_t_sensors
+        state_vector[3] = (state_vector[0] - z_ori_prev)/delta_t_sensors
+        state_vector[4] = (state_vector[1] - theta_knee_prev)/delta_t_sensors
+        state_vector[5] = (state_vector[2] - F_seat_prev)/delta_t_sensors
 
-    F_seat = # code to find F_seat based on pressure gradient
-
-    return state_vector, F_seat
+    return state_vector
 
 #   Update IMU (probably separate function for integration)
 #   Find encoder position and calculate knee angle
