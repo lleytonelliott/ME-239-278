@@ -19,16 +19,18 @@ class PhaseStateMachine:
             "finished_standing",
             "sit_threshold_crossed",
             "finished_sitting",
-            "emergency"
+            "emergency",
+            "startup_sitting",
+            "startup_standing"
         }
         
-    def transition(self, event, state_vector = None):
+    def transition(self, event):
         if event not in self.valid_events:
             print(f"Ignored Invalid Event '{event}'.")
             return
         
         handler = self.phase_handlers[self.current_phase]
-        new_phase = handler(event, state_vector = state_vector)
+        new_phase = handler(event)
 
         if self.current_phase != new_phase:
             print(f"Transition: '{self.current_phase}' -> '{new_phase}' on event '{event}'.")
@@ -38,7 +40,7 @@ class PhaseStateMachine:
         if event == "stand_threshold_crossed":
             return "sit to stand"
         elif event == "emergency":
-            return "null"
+            return "shutdown"
         return "sitting"
     
     def sit2stand(self, event, **kwargs):
@@ -47,14 +49,14 @@ class PhaseStateMachine:
         elif event == "finished_sitting":
             return "sitting"
         elif event == "emergency":
-            return "null"
+            return "shutdown"
         return "sit to stand"
     
     def standing(self, event, **kwargs):
         if event == "sit_threshold_crossed":
             return "stand to sit"
         elif event == "emergency":
-            return "null"
+            return "shutdown"
         return "standing"
 
     def stand2sit(self, event, **kwargs):
@@ -63,15 +65,14 @@ class PhaseStateMachine:
         elif event == "finished_standing":
             return "standing"
         elif event == "emergency":
-            return "null"
+            return "shutdown"
         return "stand to sit"
     
-    def null_state(self, event, state_vector):
-        if event == "startup":
-            if #state_vector hits certain threshold for sitting:
-                return "sitting"
-            else:
-                return "standing"
+    def null_state(self, event, **kwargs):
+        if event == "startup_sitting":
+            return "sitting"
+        elif event == "startup_standing":
+            return "standing"
         elif event == "emergency":
             return "shutdown"
         return "null"

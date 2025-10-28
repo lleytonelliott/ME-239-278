@@ -37,7 +37,12 @@ class AssistiveDevice:
         }
 
         self.update_sensors()
-        self.state_machine.transition("startup", self.state_vector)
+
+        if # state_vector hits certain threshold for sitting:
+            startup_event = "startup_sitting"
+        else:
+            startup_event = "startup_standing"
+        self.state_machine.transition(startup_event)
 
     def update_sensors(self):
         sensor_time_current_ns = time.monotonic_ns()
@@ -124,7 +129,7 @@ class AssistiveDevice:
         drive_motor(pwm_signal)
 
     def shutdown(self):
-        if resetbuttonpressed(): # implement later
+        if reset_button_pressed(): # implement later
             self.state_machine.transition("startup")
             return
 
