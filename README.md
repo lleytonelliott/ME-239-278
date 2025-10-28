@@ -20,4 +20,4 @@ The sensor data is also used to check for an "emergency" state which immediately
 For the scope of the classes, in lieu of a fully robust dynamic model of the human sitting/standing motion, we opted for a predetermined trajectory based on existing data. Each point along the trajectory corresponds to a state vector (the quantities described above and their derivatives) and a recommended/desired torque to help advance the user to the next step along the trajectory. At each time step, the model estimates where the user is along the trajectory using least-squares optimization, and sets the desired torque accordingly once it infers the position. The "torque" in this case is actually a virtual torque applied near the knee joint. The system uses a linear actuator to assist the user, so we derived an equation to calculate the virtual torque based on the current through the linear actuator's motor.
 
 High-Level Code Block Diagram:
-![Block Diagram](images/block_diagram.svgg)
+![Block Diagram](images/block_diagram.svg)
