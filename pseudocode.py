@@ -11,6 +11,28 @@ Kt = 0
 
 # Set Up State Machine
 
+class AssistiveDevice:
+    def __init__(self, kp, kd, Kt):
+
+        self.state_machine = PhaseStateMachine
+        self.torque_controller = TorqueController(kp, kd, Kt)
+
+        self.state_vector = np.array([0, 0, 0, 0, 0, 0])
+        self.sensor_time_prev = time.monotonic_ns()
+
+        self.phase_handlers = {
+            "null": self.null_state,
+            "sitting": self.sitting,
+            "sit to stand": self.sit2stand,
+            "standing": self.standing,
+            "stand to sit": self.stand2sit,
+        }
+
+        self.update_sensors()
+        self.state_machine.transition("startup", self.state_vector)
+
+    def update_sensors(self)
+
 class PhaseStateMachine:
     def __init__(self):
         self.current_phase = "null"
@@ -93,22 +115,28 @@ class TorqueController:
         self.kp = kp
         self.kd = kd
         self.Kt = Kt
-        self.error_prev = 0
+        self.tau_prev = None
         self.time_prev = time.monotonic_ns()
     
     def generate_PD(self, tau_desired):
         motor_current = read_motor_current()
         tau_actual = motor_current*self.Kt
+        if self.tau_prev == None:
+            self.tau_prev = tau_actual
         error = tau_desired - tau_actual
 
         time_current = time.monotonic_ns()
-        delta_t = (time_current - self.time_prev)/1000000000
+        delta_t = (time_current - self.time_prev)/1000000000.0
         self.time_prev = time_current
 
-        d_error = (error - self.error_prev)/delta_t
-        self.error_prev = error
+        if delta_t == 0:
+            d_tau = 0
+            self.tau_prev = tau_actual
+        else:
+            d_tau = (tau_actual - self.tau_prev)/delta_t
+            self.tau_prev = tau_actual
         
-        return self.kp*error + self.kd*d_error
+        return self.kp*error - self.kd*d_tau
 
 # Functions
 
@@ -158,8 +186,6 @@ def update_sensors(state_vector, delta_t_sensors):
 #   Find force vector from seat
 
 # def read_motor_current:
-
-# def calculate_motor_torque:
 
 # def drive_motor(PD_signal)
 #   Some code to drive the motor
