@@ -10,7 +10,7 @@ from dynamic_model import DynamicModel
 from hardware import drive_motor, reset_button_pressed # and other stuff
 
 class AssistiveDevice:
-    def __init__(self, kp, kd, Kt, sitting_threshold, sit2stand_threshold, standing_threshold, stand2sit_threshold, emergency_threshold):
+    def __init__(self, kp, kd, Kt, sitting_threshold, sit2stand_threshold, standing_threshold, stand2sit_threshold, emergency_threshold, mmarray):
         self.kp = kp
         self.kd = kd
         self.Kt = Kt
@@ -22,7 +22,7 @@ class AssistiveDevice:
         
         self.state_machine = PhaseStateMachine()
         self.torque_controller = TorqueController(self.kp, self.kd, self.Kt)
-        self.dynamic_model = DynamicModel()
+        self.dynamic_model = DynamicModel(mmarray)
 
         self.state_vector = np.array([None]*6)
         self.sensor_time_prev_ns = time.monotonic_ns()

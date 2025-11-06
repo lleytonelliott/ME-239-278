@@ -1,7 +1,10 @@
 # Main Code
 
 import time
+import numpy as np
+
 from assistive_device import AssistiveDevice
+from dynamic_model import mmdata
 
 # Motor Control Variables
 
@@ -54,6 +57,7 @@ if __name__ == "__main__":
         standing_threshold=standing_threshold,
         stand2sit_threshold=stand2sit_threshold,
         emergency_threshold=emergency_threshold
+        mmarray=mmdata
     )
 
     device.main_loop()
