@@ -1,0 +1,13 @@
+# Motor Driver
+MOTOR_PWM_PIN_FORWARD = 25
+MOTOR_PWM_PIN_REVERSE = 26
+
+# I2C
+IMU_SDA_PIN = 21
+IMU_SCL_PIN = 22
+
+# Pressure Sensors
+PRESSURE_PIN_1 = 18
+
+# Reset Button
+RESET_BUTTON_PIN = 36
