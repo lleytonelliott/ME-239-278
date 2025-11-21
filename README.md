@@ -1,6 +1,6 @@
 # ME-239-278
 ME 239 (Robotic Locomotion) &amp; 278 (Design for the Human Body) Project, UC Berkeley, Fall 2025  
-*Contributors: Lleyton Elliott*
+*Contributors: Lleyton Elliott, Darius Nguepi*
 
 Code for a group project shared between two graduate classes. This code runs a wearable assistive sit-to-stand device based on a dynamics model, with multimodal sensor input governing the device's action based on the user's inferred phase of motion.
 
